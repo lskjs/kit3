@@ -28,8 +28,8 @@ services:
       labels:
         - traefik.enable=true
         - traefik.http.routers._${DOCKER_SERVICE}_api.middlewares=http-to-https@file
-        - traefik.http.routers._${DOCKER_SERVICE}_api.rule=${VIRTUAL_HOST} && ((PathPrefix(`/api`) || PathPrefix(`/socket.io`))
-        - traefik.http.routers.${DOCKER_SERVICE}_api.rule=${VIRTUAL_HOST} && ((PathPrefix(`/api`) || PathPrefix(`/socket.io`))
+        - traefik.http.routers._${DOCKER_SERVICE}_api.rule=${VIRTUAL_HOST} && (PathPrefix(`/api`) || PathPrefix(`/socket.io`))
+        - traefik.http.routers.${DOCKER_SERVICE}_api.rule=${VIRTUAL_HOST} && (PathPrefix(`/api`) || PathPrefix(`/socket.io`))
         - traefik.http.routers.${DOCKER_SERVICE}_api.tls=true
         - traefik.http.routers.${DOCKER_SERVICE}_api.service=${DOCKER_SERVICE}_api
         - traefik.http.services.${DOCKER_SERVICE}_api.loadbalancer.server.port=8080
