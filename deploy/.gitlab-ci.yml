@@ -81,7 +81,7 @@ deploy:dev:
     DOCKER_IMAGE_API: ${DOCKER_REGISTRY}/${CI_PROJECT_PATH}/api:${CI_COMMIT_SHORT_SHA}
     DOCKER_IMAGE_WEB: ${DOCKER_REGISTRY}/${CI_PROJECT_PATH}/web:${CI_COMMIT_SHORT_SHA}
     DOCKER_STACK: ./deploy/docker-stack.yml
-    DOCKER_SERVICE: dev_alfred
+    DOCKER_SERVICE: dev_kit
     VIRTUAL_HOST: (Host(`dev-kit.chatterfy.ai`))
   environment:
     name: dev
@@ -99,7 +99,7 @@ deploy:prod:
     DOCKER_IMAGE_API: ${DOCKER_REGISTRY}/${CI_PROJECT_PATH}/api:${CI_COMMIT_SHORT_SHA}
     DOCKER_IMAGE_WEB: ${DOCKER_REGISTRY}/${CI_PROJECT_PATH}/web:${CI_COMMIT_SHORT_SHA}
     DOCKER_STACK: ./deploy/docker-stack.yml
-    DOCKER_SERVICE: prod_alfred
+    DOCKER_SERVICE: prod_kit
     VIRTUAL_HOST: (Host(`kit.chatterfy.ai`))
   environment:
     name: prod
@@ -118,7 +118,7 @@ deploy:prod:manual:
     DOCKER_IMAGE_API: ${DOCKER_REGISTRY}/${CI_PROJECT_PATH}/api:${CI_COMMIT_SHORT_SHA}
     DOCKER_IMAGE_WEB: ${DOCKER_REGISTRY}/${CI_PROJECT_PATH}/web:${CI_COMMIT_SHORT_SHA}
     DOCKER_STACK: ./deploy/docker-stack.yml
-    DOCKER_SERVICE: prod_alfred
+    DOCKER_SERVICE: prod_kit
     VIRTUAL_HOST: (Host(`kit.chatterfy.ai`))
   environment:
     name: prod
