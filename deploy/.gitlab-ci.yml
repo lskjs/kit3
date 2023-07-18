@@ -13,7 +13,7 @@ build_api:
   tags:
     # - debug_build
     - build
-  image: dockerhub.buzz.guru/lskjs/node:20.2.0-alpine
+  image: lskjs/node:20.2.0-alpine
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
@@ -37,7 +37,7 @@ build_web:
   tags:
     # - debug_build
     - build
-  image: dockerhub.buzz.guru/lskjs/node:20.2.0-alpine
+  image: lskjs/node:20.2.0-alpine
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
@@ -51,8 +51,8 @@ build_web:
     CWD: apps/web
   script:
     - pnpm install
+    - pnpm build
     - pnpm -F "." deploy .release
-    - cd .release && pnpm build
     
 docker_api:
   extends:
