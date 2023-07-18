@@ -79,12 +79,12 @@ docker build -t kit-api .
 
 ### How to start
 
-1. Check deploy/gitlab-ci.yml file
+1. Check `deploy/gitlab-ci.yml` file
 
 - Change `DOCKER_SERVICE` prefix and `VIRTUAL_HOST` for your.
 - Add more stages/branches if you need.
 
-2. Check deploy/docker-stack.yml file
+2. Check `deploy/docker-stack.yml` file
 
 - Change `loadbalancer.server.port` for port of your app.
 - Change `deploy.replicas` if you need.
@@ -93,7 +93,7 @@ docker build -t kit-api .
 
 3. Change custom CI configuration path
 
-For every project to `deploy/.gitlab-ci.yml`
+For your project to `deploy/.gitlab-ci.yml` or place `.gitlab-ci.yml` to root directory
 
 [General pipelines](https://git.buzz.guru/lskjs/kit3/-/settings/ci_cd)
 
