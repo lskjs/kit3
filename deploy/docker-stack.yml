@@ -1,0 +1,91 @@
+version: "3.8"
+services:
+  api:
+    image: ${DOCKER_IMAGE_API}
+    networks:
+      - proxy
+    env_file:
+      - ${${STAGE}_env_file}
+    secrets:
+      - source: env_file
+        target: /app/.env
+        mode: 0444
+      - source: env_js
+        target: /app/.env.js
+        mode: 0444
+    environment:
+      STAGE: ${STAGE}
+      STAGE_INSTANCE: "{{.Task.Slot}}"
+      VERSION: ${VERSION}
+      CI_COMMIT_SHORT_SHA: ${CI_COMMIT_SHORT_SHA}
+      CI_COMMIT_SHA: ${CI_COMMIT_SHA}
+      CI_PIPELINE_ID: ${CI_PIPELINE_ID}
+      CI_JOB_ID: ${CI_JOB_ID}     
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.labels.web==true]
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers._${DOCKER_SERVICE}_api.middlewares=http-to-https@file
+        - traefik.http.routers._${DOCKER_SERVICE}_api.rule=${VIRTUAL_HOST} && ((PathPrefix(`/api`) || PathPrefix(`/socket.io`))
+        - traefik.http.routers.${DOCKER_SERVICE}_api.rule=${VIRTUAL_HOST} && ((PathPrefix(`/api`) || PathPrefix(`/socket.io`))
+        - traefik.http.routers.${DOCKER_SERVICE}_api.tls=true
+        - traefik.http.routers.${DOCKER_SERVICE}_api.service=${DOCKER_SERVICE}_api
+        - traefik.http.services.${DOCKER_SERVICE}_api.loadbalancer.server.port=8080
+  web:
+    image: ${DOCKER_IMAGE_WEB}
+    networks:
+      - proxy
+    env_file:
+      - ${${STAGE}_env_file}
+    secrets:
+      - source: env_file
+        target: /app/.env
+        mode: 0444
+      - source: env_js
+        target: /app/.env.js
+        mode: 0444
+    volumes:
+      - /tmp/mongodb-27000.sock:/tmp/mongodb-27000.sock
+      - /tmp/mongodb-27001.sock:/tmp/mongodb-27001.sock
+      - /tmp/mongodb-27002.sock:/tmp/mongodb-27002.sock
+      - /tmp/mongodb-27003.sock:/tmp/mongodb-27003.sock
+      - /tmp/mongodb-27004.sock:/tmp/mongodb-27004.sock
+      - /tmp/mongodb-27005.sock:/tmp/mongodb-27005.sock
+      - /tmp/mongodb-27006.sock:/tmp/mongodb-27006.sock
+      - /tmp/mongodb-27007.sock:/tmp/mongodb-27007.sock
+    environment:
+      STAGE: ${STAGE}
+      STAGE_INSTANCE: "{{.Task.Slot}}"
+      VERSION: ${VERSION}
+      CI_COMMIT_SHORT_SHA: ${CI_COMMIT_SHORT_SHA}
+      CI_COMMIT_SHA: ${CI_COMMIT_SHA}
+      CI_PIPELINE_ID: ${CI_PIPELINE_ID}
+      CI_JOB_ID: ${CI_JOB_ID}     
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.web6 == true
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers._${DOCKER_SERVICE}_web.middlewares=http-to-https@file
+        - traefik.http.routers._${DOCKER_SERVICE}_web.rule=${VIRTUAL_HOST}
+        - traefik.http.routers.${DOCKER_SERVICE}_web.rule=${VIRTUAL_HOST}
+        - traefik.http.routers.${DOCKER_SERVICE}_web.tls=true
+        - traefik.http.routers.${DOCKER_SERVICE}_web.service=${DOCKER_SERVICE}_web
+        - traefik.http.services.${DOCKER_SERVICE}_web.loadbalancer.server.port=3000
+secrets:
+  env_file:
+    name: >-
+      ${CI_PROJECT_PATH_SLUG}_${STAGE}_${CI_COMMIT_SHORT_SHA}_${CI_JOB_ID}_env_file
+    file: ${${STAGE}_env_file}
+  env_js:
+    name: >-
+      ${CI_PROJECT_PATH_SLUG}_${STAGE}_${CI_COMMIT_SHORT_SHA}_${CI_JOB_ID}_env_js
+    file: ${${STAGE}_env_js}
+networks:
+  proxy:
+    external: true
+    name: proxy
