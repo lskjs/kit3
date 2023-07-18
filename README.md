@@ -1,13 +1,16 @@
 # KIT
 
-## Local development
+## Development
 
-### Tech stack
+### Prerequisites
 
-- Node.js
-- [pnpm](https://pnpm.js.org/) - package manager
+- [Node.js](https://nodejs.org/en/) - Any latest version
+- [pnpm](https://pnpm.io/) - package manager
+- [Docker](https://www.docker.com/) - for manual deployment
 
-#### 1. Add .env or .env.js file in root directory
+### How to start
+
+1. Add .env or .env.js file in root directory
 
 ```bash
 # .env
@@ -21,19 +24,19 @@ module.exports = {
 }
 ```
 
-#### 2. Install dependencies
+2. Install dependencies
 
 ```bash
 pnpm install
 ```
 
-#### 3. Run dev script
+3. Run dev script
 
 ```bash
 pnpm run dev
 ```
 
-## Manual deployment
+### Manual deployment
 
 1. Install dependencies
 
@@ -41,24 +44,24 @@ pnpm run dev
 pnpm install
 ```
 
-#### 2. Run build script 
+2. Run build script 
 
 ```bash
 pnpm run build
 ```
 
-#### 3. Check that all ok and your  result in apps/*/lib directory
+3. Check that all ok and your  result in apps/*/lib directory
 
-#### 4. Eject node_modules for every app from apps/*
+4. Eject node_modules for every app from apps/*
 
 ```bash
 cd apps/api/lib
 pnpm -F "." deploy .release
 ```
 
-#### 5. Check that all ok and your result in apps/*/.release directory
+5. Check that all ok and your result in apps/*/.release directory
 
-#### 6. Build docker image for every app in apps/* directory
+6. Build docker image for every app in apps/* directory
 
 ```bash
 cd apps/api
@@ -74,25 +77,27 @@ docker build -t kit-api .
 - Nexus (docker registry)
 - Traefik (loadbalancer)
 
-#### 1. Check deploy/gitlab-ci.yml file
+### How to start
+
+1. Check deploy/gitlab-ci.yml file
 
 - Change `DOCKER_SERVICE` prefix and `VIRTUAL_HOST` for your.
 - Add more stages/branches if you need.
 
-#### 2. Check deploy/docker-stack.yml file
+2. Check deploy/docker-stack.yml file
 
 - Change `loadbalancer.server.port` for port of your app.
 - Change `deploy.replicas` if you need.
 - Change `deploy.placement.constraints` - `node.labels` for your node labels.
 - Add more paths in `traefik.http.routers.*.rule`if you need.
 
-#### 3. Change custom CI configuration path
+3. Change custom CI configuration path
 
 For every project to `deploy/.gitlab-ci.yml`
 
 [General pipelines](https://git.buzz.guru/lskjs/kit3/-/settings/ci_cd)
 
-#### 4. Check or fill CI Varibles for Docker Registry
+4. Check or fill CI Varibles for Docker Registry
 
 - `DOCKER_REGISTRY` - `registry.buzz.guru`
 - `DOCKER_REGISTRY_USER` - username of nexus registry
@@ -100,7 +105,7 @@ For every project to `deploy/.gitlab-ci.yml`
 
 [Variables](https://git.buzz.guru/lskjs/kit3/-/settings/ci_cd)
 
-#### 5. Check or add .env and .env.js files
+5. Check or add .env and .env.js files
 
 files in CI Variables for every stage
 
@@ -111,11 +116,11 @@ files in CI Variables for every stage
 
 You can change variable names in `deploy/docker-stack.yml`
 
-#### 6. Check you branch protected option
+6. Check you branch protected option
 
 [Protected Branches](https://git.buzz.guru/lskjs/kit3/-/settings/repository)
 
-#### 7. Push
+7. Push
 
 - master branch for production
 - development branch for dev
