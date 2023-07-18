@@ -1,12 +1,12 @@
 {
-  "name": "kit3-api",
+  "name": "kit3-web",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node lib --kit3/apps/api",
+    "start": "node lib --kit3/apps/web",
     "build": "cp -R ./src ./lib && echo ok",
-    "dev": "node src",
+    "dev": "nodemon src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
