@@ -122,5 +122,5 @@ You can change variable names in `deploy/docker-stack.yml`
 
 7. Push
 
-- master branch for production
-- development branch for dev
+- `master` branch for `prod` stage
+- `develop` branch for `dev` stage
