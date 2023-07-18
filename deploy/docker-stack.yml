@@ -76,6 +76,7 @@ services:
         - traefik.http.routers.${DOCKER_SERVICE}_web.tls=true
         - traefik.http.routers.${DOCKER_SERVICE}_web.service=${DOCKER_SERVICE}_web
         - traefik.http.services.${DOCKER_SERVICE}_web.loadbalancer.server.port=3000
+
 secrets:
   env_file:
     name: >-
@@ -89,3 +90,4 @@ networks:
   proxy:
     external: true
     name: proxy
+
