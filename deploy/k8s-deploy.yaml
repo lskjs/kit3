@@ -39,19 +39,19 @@ spec:
             - name: NODE_OPTIONS
               value: "--max_old_space_size=4096"
             - name: STAGE
-              value: ${STAGE}
+              value: "${STAGE}"
             - name: VERSION
-              value: ${VERSION}
+              value: "${VERSION}"
             - name: CLUSTER_ENV
-              value: ${CLUSTER_ENV}
+              value: "${CLUSTER_ENV}"
             - name: CI_COMMIT_SHORT_SHA
-              value: ${CI_COMMIT_SHORT_SHA}
+              value: "${CI_COMMIT_SHORT_SHA}"
             - name: CI_COMMIT_SHA
-              value: ${CI_COMMIT_SHA}
+              value: "${CI_COMMIT_SHA}"
             - name: CI_PIPELINE_ID
-              value: ${CI_PIPELINE_ID}
+              value: "${CI_PIPELINE_ID}"
             - name: CI_JOB_ID
-              value: ${CI_JOB_ID}
+              value: "${CI_JOB_ID}"
         - name: web
           image: ${DOCKER_IMAGE_WEB}
           volumeMounts:
@@ -70,19 +70,19 @@ spec:
             - name: NODE_OPTIONS
               value: "--max_old_space_size=4096"
             - name: STAGE
-              value: ${STAGE}
+              value: "${STAGE}"
             - name: VERSION
-              value: ${VERSION}
+              value: "${VERSION}"
             - name: CLUSTER_ENV
-              value: ${CLUSTER_ENV}
+              value: "${CLUSTER_ENV}"
             - name: CI_COMMIT_SHORT_SHA
-              value: ${CI_COMMIT_SHORT_SHA}
+              value: "${CI_COMMIT_SHORT_SHA}"
             - name: CI_COMMIT_SHA
-              value: ${CI_COMMIT_SHA}
+              value: "${CI_COMMIT_SHA}"
             - name: CI_PIPELINE_ID
-              value: ${CI_PIPELINE_ID}
+              value: "${CI_PIPELINE_ID}"
             - name: CI_JOB_ID
-              value: ${CI_JOB_ID}
+              value: "${CI_JOB_ID}"
 ---
 apiVersion: v1
 kind: Service
