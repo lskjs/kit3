@@ -1,0 +1,126 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ${APP_NAME}
+  labels:
+    app: ${APP_NAME}
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ${APP_NAME}
+  template:
+    metadata:
+      labels:
+        app: ${APP_NAME}
+    spec:
+      volumes:
+        - name: env
+          secret:
+            secretName: prod-kit
+      containers:
+        - name: api
+          image: ${DOCKER_IMAGE_API}
+          volumeMounts:
+            - name: env
+              readOnly: true
+              mountPath: "/app/.env.js"
+              subPath: "prod_env_js"
+            - name: env
+              readOnly: true
+              mountPath: "/app/.env"
+              subPath: "prod_env_file"
+          ports:
+            - name: api
+              containerPort: 8080
+          env:
+            - name: NODE_OPTIONS
+              value: "--max_old_space_size=4096"
+            - name: STAGE
+              value: ${STAGE}
+            - name: VERSION
+              value: ${VERSION}
+            - name: CLUSTER_ENV
+              value: ${CLUSTER_ENV}
+            - name: CI_COMMIT_SHORT_SHA
+              value: ${CI_COMMIT_SHORT_SHA}
+            - name: CI_COMMIT_SHA
+              value: ${CI_COMMIT_SHA}
+            - name: CI_PIPELINE_ID
+              value: ${CI_PIPELINE_ID}
+            - name: CI_JOB_ID
+              value: ${CI_JOB_ID}
+        - name: web
+          image: ${DOCKER_IMAGE_WEB}
+          volumeMounts:
+            - name: env
+              readOnly: true
+              mountPath: "/app/.env.js"
+              subPath: "prod_env_js"
+            - name: env
+              readOnly: true
+              mountPath: "/app/.env"
+              subPath: "prod_env_file"
+          ports:
+            - name: web
+              containerPort: 3000
+          env:
+            - name: NODE_OPTIONS
+              value: "--max_old_space_size=4096"
+            - name: STAGE
+              value: ${STAGE}
+            - name: VERSION
+              value: ${VERSION}
+            - name: CLUSTER_ENV
+              value: ${CLUSTER_ENV}
+            - name: CI_COMMIT_SHORT_SHA
+              value: ${CI_COMMIT_SHORT_SHA}
+            - name: CI_COMMIT_SHA
+              value: ${CI_COMMIT_SHA}
+            - name: CI_PIPELINE_ID
+              value: ${CI_PIPELINE_ID}
+            - name: CI_JOB_ID
+              value: ${CI_JOB_ID}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${APP_NAME}
+
+spec:
+  ports:
+    - name: web
+      port: 3000
+      targetPort: web
+    - name: api
+      port: 8080
+      targetPort: api
+
+  selector:
+    app: ${APP_NAME}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${APP_NAME}-ingress
+spec:
+  rules:
+  - host: "k8s.chatterfy.ai"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ${APP_NAME}
+            port:
+              name: web
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: ${APP_NAME}
+            port:
+              name: api

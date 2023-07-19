@@ -125,3 +125,30 @@ deploy:prod:manual:
   when: manual
   except:
     - master
+
+deploy_k8s:prod:manual:
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: ['']
+  tags:
+    - deploy
+    - prod
+  script:
+    - kubectl cluster-info
+    - kubectl create secret generic prod-kit --from-file=${prod_env_file} --from-file=${prod_env_js} --save-config --dry-run=client -o yaml | kubectl apply -f -
+    - envsubst < deploy/k8s-deploy.yaml > deploy.yaml.${CI_COMMIT_SHORT_SHA}
+    - kubectl apply -f ./deploy.yaml.${CI_COMMIT_SHORT_SHA}
+  variables:
+    STAGE: prod
+    APP_NAME: kit3
+    DOCKER_IMAGE_APP: ${DOCKER_REGISTRY}/${CI_PROJECT_PATH}/app:${CI_COMMIT_SHORT_SHA}
+    DOCKER_IMAGE_API: ${DOCKER_REGISTRY}/${CI_PROJECT_PATH}/api:${CI_COMMIT_SHORT_SHA}
+    DOCKER_IMAGE_WEB: ${DOCKER_REGISTRY}/${CI_PROJECT_PATH}/web:${CI_COMMIT_SHORT_SHA}
+    DOCKER_SERVICE: prod_kit
+    VIRTUAL_HOST: (Host(`kit.chatterfy.ai`))
+  environment:
+    name: prod
+  when: manual
+  except:
+    - master
+
