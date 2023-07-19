@@ -68,7 +68,7 @@ cd apps/api
 docker build -t kit-api .
 ```
 
-## Deployment into BuzzGuru infrastructure
+## Deployment inside BuzzGuru infrastructure
 
 ### Tech stack
 
@@ -124,3 +124,31 @@ You can change variable names in `deploy/docker-stack.yml`
 
 - `master` branch for `prod` stage
 - `develop` branch for `dev` stage
+
+
+## Deployment from BuzzGuru infrastructure to DigitalOcean Kubernetes
+
+### Manual deploy
+`kubectl apply -f ./deploy/k8s-deploy.yaml`
+
+### Not for this project, but for all:
+
+### Config for kubectl
+The easiest way to apply the configuration to kubectl is to put it in `~/.kube/config` and check it with `kubectl cluster-info`, it should output the cluster ip or just no errors
+
+#### Dashboard 
+##### Install
+`kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml`
+
+##### Use
+`kubectl proxy`
+
+Open in browser:
+
+`http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/`
+
+#### Traefik
+
+`kubectl apply -f ./deploy/traefik-deployment.yaml`
+
+Use `kubectl get services` until services starting with `traefik` get the EXTERNAL-IP
