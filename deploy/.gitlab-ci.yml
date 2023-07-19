@@ -132,12 +132,11 @@ deploy:k8s_prod:manual:
   stage: deploy
   extends: .docker-utils-before-script
   image:
-    name: bitnami/kubectl:1.27.3
+    name: gregi/kubectl-deployer:latest
     entrypoint: [""]
   tags:
     - docker
   script:
-    - apk add --update bash gettext
     - kubectl cluster-info
     - kubectl create secret generic prod-kit --from-file=${prod_env_file} --from-file=${prod_env_js} --save-config --dry-run=client -o yaml | kubectl apply -f -
     - envsubst < deploy/k8s-deploy.yaml > deploy.yaml.${CI_COMMIT_SHORT_SHA}
