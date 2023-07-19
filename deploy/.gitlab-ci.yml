@@ -166,7 +166,7 @@ deploy:k8s_prod:manual:
   stage: deploy
   extends: .docker-utils-before-script
   image:
-    name: ga2mer/kubectl:1.27-debian11
+    name: lskjs/kubectl
     entrypoint: [""]
   tags:
     - docker
