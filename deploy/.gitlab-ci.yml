@@ -132,7 +132,7 @@ deploy:k8s_prod:manual:
   stage: deploy
   extends: .docker-utils-before-script
   image:
-    name: bitnami/kubectl:1.14
+    name: bitnami/kubectl:1.27.3
     entrypoint: [""]
   tags:
     - docker
