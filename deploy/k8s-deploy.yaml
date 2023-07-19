@@ -20,11 +20,11 @@ spec:
         - name: env
           secret:
             secretName: prod-kit
+      imagePullSecrets:
+          - name: canistra
       containers:
         - name: api
           image: ${DOCKER_IMAGE_API}
-          imagePullSecrets:
-            - name: canistra
           volumeMounts:
             - name: env
               readOnly: true
@@ -56,8 +56,6 @@ spec:
               value: "${CI_JOB_ID}"
         - name: web
           image: ${DOCKER_IMAGE_WEB}
-          imagePullSecrets:
-            - name: canistra
           volumeMounts:
             - name: env
               readOnly: true
