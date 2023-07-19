@@ -70,14 +70,14 @@ docker_api_do:
   script:
     # - log docker login -u ${DOCKER_REGISTRY_USER} -p ${DOCKER_REGISTRY_PASS} ${DOCKER_REGISTRY}
     - echo ${DO_DOCKER_REGISTRY_PASS} | log docker login -u ${DO_DOCKER_REGISTRY_USER} --password-stdin ${DO_DOCKER_REGISTRY}
-    - log docker build -t ${DO_DOCKER_REGISTRY}/kit/api:${CI_COMMIT_SHORT_SHA} ${DOCKER_FILE}
-    - docker tag ${DO_DOCKER_REGISTRY}/kit/api:${CI_COMMIT_SHORT_SHA} ${DO_DOCKER_REGISTRY}/kit/api:${CI_COMMIT_REF_NAME}
-    - docker push ${DO_DOCKER_REGISTRY}/kit/api:${CI_COMMIT_SHORT_SHA}
-    - docker push ${DO_DOCKER_REGISTRY}/kit/api:${CI_COMMIT_REF_NAME}
+    - log docker build -t ${DO_DOCKER_REGISTRY}/ga2mer/api:${CI_COMMIT_SHORT_SHA} ${DOCKER_FILE}
+    - docker tag ${DO_DOCKER_REGISTRY}/ga2mer/api:${CI_COMMIT_SHORT_SHA} ${DO_DOCKER_REGISTRY}/ga2mer/api:${CI_COMMIT_REF_NAME}
+    - docker push ${DO_DOCKER_REGISTRY}/ga2mer/api:${CI_COMMIT_SHORT_SHA}
+    - docker push ${DO_DOCKER_REGISTRY}/ga2mer/api:${CI_COMMIT_REF_NAME}
   variables:
     CWD: apps/api
-    DOCKER_IMAGE: ${DO_DOCKER_REGISTRY}/kit/api:${CI_COMMIT_SHORT_SHA}
-    DOCKER_IMAGE_TAG: ${DO_DOCKER_REGISTRY}/kit/api:${CI_COMMIT_REF_NAME}
+    DOCKER_IMAGE: ${DO_DOCKER_REGISTRY}/ga2mer/api:${CI_COMMIT_SHORT_SHA}
+    DOCKER_IMAGE_TAG: ${DO_DOCKER_REGISTRY}/ga2mer/api:${CI_COMMIT_REF_NAME}
 
 docker_web_do:
   stage: docker
@@ -87,14 +87,14 @@ docker_web_do:
   script:
     # - log docker login -u ${DOCKER_REGISTRY_USER} -p ${DOCKER_REGISTRY_PASS} ${DOCKER_REGISTRY}
     - echo ${DO_DOCKER_REGISTRY_PASS} | log docker login -u ${DO_DOCKER_REGISTRY_USER} --password-stdin ${DO_DOCKER_REGISTRY}
-    - log docker build -t ${DO_DOCKER_REGISTRY}/kit/web:${CI_COMMIT_SHORT_SHA} ${DOCKER_FILE}
-    - docker tag ${DO_DOCKER_REGISTRY}/kit/web:${CI_COMMIT_SHORT_SHA} ${DO_DOCKER_REGISTRY}/kit/web:${CI_COMMIT_REF_NAME}
-    - docker push ${DO_DOCKER_REGISTRY}/kit/web:${CI_COMMIT_SHORT_SHA}
-    - docker push ${DO_DOCKER_REGISTRY}/kit/web:${CI_COMMIT_REF_NAME}
+    - log docker build -t ${DO_DOCKER_REGISTRY}/ga2mer/web:${CI_COMMIT_SHORT_SHA} ${DOCKER_FILE}
+    - docker tag ${DO_DOCKER_REGISTRY}/ga2mer/web:${CI_COMMIT_SHORT_SHA} ${DO_DOCKER_REGISTRY}/ga2mer/web:${CI_COMMIT_REF_NAME}
+    - docker push ${DO_DOCKER_REGISTRY}/ga2mer/web:${CI_COMMIT_SHORT_SHA}
+    - docker push ${DO_DOCKER_REGISTRY}/ga2mer/web:${CI_COMMIT_REF_NAME}
   variables:
     CWD: apps/web
-    DOCKER_IMAGE: ${DO_DOCKER_REGISTRY}/kit/web:${CI_COMMIT_SHORT_SHA}
-    DOCKER_IMAGE_TAG: ${DO_DOCKER_REGISTRY}/kit/web:${CI_COMMIT_REF_NAME}
+    DOCKER_IMAGE: ${DO_DOCKER_REGISTRY}/ga2mer/web:${CI_COMMIT_SHORT_SHA}
+    DOCKER_IMAGE_TAG: ${DO_DOCKER_REGISTRY}/ga2mer/web:${CI_COMMIT_REF_NAME}
 
 docker_web:
   extends:
@@ -178,9 +178,9 @@ deploy:k8s_prod:manual:
   variables:
     STAGE: prod
     APP_NAME: kit3
-    DOCKER_IMAGE_APP: ${DO_DOCKER_REGISTRY}/kit/app:${CI_COMMIT_SHORT_SHA}
-    DOCKER_IMAGE_API: ${DO_DOCKER_REGISTRY}/kit/api:${CI_COMMIT_SHORT_SHA}
-    DOCKER_IMAGE_WEB: ${DO_DOCKER_REGISTRY}/kit/web:${CI_COMMIT_SHORT_SHA}
+    DOCKER_IMAGE_APP: ${DO_DOCKER_REGISTRY}/ga2mer/app:${CI_COMMIT_SHORT_SHA}
+    DOCKER_IMAGE_API: ${DO_DOCKER_REGISTRY}/ga2mer/api:${CI_COMMIT_SHORT_SHA}
+    DOCKER_IMAGE_WEB: ${DO_DOCKER_REGISTRY}/ga2mer/web:${CI_COMMIT_SHORT_SHA}
     DOCKER_SERVICE: prod_kit
     VIRTUAL_HOST: (Host(`kit.chatterfy.ai`))
   environment:

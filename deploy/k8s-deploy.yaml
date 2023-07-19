@@ -24,7 +24,7 @@ spec:
         - name: api
           image: ${DOCKER_IMAGE_API}
           imagePullSecrets:
-            - name: kit
+            - name: canistra
           volumeMounts:
             - name: env
               readOnly: true
@@ -57,7 +57,7 @@ spec:
         - name: web
           image: ${DOCKER_IMAGE_WEB}
           imagePullSecrets:
-            - name: kit
+            - name: canistra
           volumeMounts:
             - name: env
               readOnly: true
