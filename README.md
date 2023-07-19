@@ -59,9 +59,9 @@ cd apps/api/lib
 pnpm -F "." deploy .release
 ```
 
-5. Check that all ok and your result in apps/*/.release directory
+5. Check that all ok and your result in `apps/*/.release` directory
 
-6. Build docker image for every app in apps/* directory
+6. Build docker image for every app in `apps/*` directory
 
 ```bash
 cd apps/api
