@@ -127,9 +127,11 @@ deploy:prod:manual:
     - master
 
 deploy:k8s_prod:manual:
+  stage: deploy
   image:
     name: bitnami/kubectl:latest
     entrypoint: ['']
+  extends: .docker-utils-before-script
   tags:
     - deploy
     - prod
