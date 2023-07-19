@@ -126,7 +126,7 @@ deploy:prod:manual:
   except:
     - master
 
-deploy_k8s:prod:manual:
+deploy:k8s_prod:manual:
   image:
     name: bitnami/kubectl:latest
     entrypoint: ['']
