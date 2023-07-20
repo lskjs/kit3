@@ -13,6 +13,7 @@ build:k8s:
   image:
     name: lskjs/kubectl:1.27.2
     entrypoint: [""]
+    cmd: [""]
   tags:
     - docker
   script:
