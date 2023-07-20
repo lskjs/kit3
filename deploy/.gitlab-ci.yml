@@ -164,9 +164,9 @@ deploy:prod:manual:
 
 deploy:k8s_prod:manual:
   stage: deploy
-  extends: .docker-utils-before-script
+  # extends: .docker-utils-before-script
   image:
-    name: lskjs/kubectl:1.27
+    name: lskjs/kubectl:1.27.2
   tags:
     - docker
   script:
