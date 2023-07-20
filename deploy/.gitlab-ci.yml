@@ -12,8 +12,8 @@ build:k8s:
   # extends: .docker-utils-before-script
   image:
     name: lskjs/kubectl:1.27.2
-    entrypoint: [""]
-    cmd: [""]
+    # entrypoint: [""]
+    # cmd: [""]
   tags:
     - docker
   script:
