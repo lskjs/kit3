@@ -6,22 +6,6 @@ stages:
   - docker 
   - deploy
 
-
-build:k8s:
-  stage: build
-  # extends: .docker-utils-before-script
-  image:
-    name: lskjs/kubectl
-  tags:
-    - docker
-  script:
-    - echo 123
-    # - kubectl cluster-info
-    # - kubectl create secret generic prod-kit --from-file=${prod_env_file} --from-file=${prod_env_js} --save-config --dry-run=client -o yaml | kubectl apply -f -
-    # - envsubst < deploy/k8s-deploy.yaml > deploy.yaml.${CI_COMMIT_SHORT_SHA}
-    # - kubectl apply -f ./deploy.yaml.${CI_COMMIT_SHORT_SHA}
-
-
 build_api:
   extends:
     - .utils-before-script
@@ -182,7 +166,7 @@ deploy:k8s_prod:manual:
   stage: deploy
   # extends: .docker-utils-before-script
   image:
-    name: lskjs/kubectl:1.27.2
+    name: lskjs/kubectl
   tags:
     - docker
   script:
