@@ -11,9 +11,7 @@ build:k8s:
   stage: build
   # extends: .docker-utils-before-script
   image:
-    name: lskjs/kubectl:1.27
-    # entrypoint: [""]
-    # cmd: [""]
+    name: lskjs/kubectl
   tags:
     - docker
   script:
