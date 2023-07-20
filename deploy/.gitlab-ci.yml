@@ -8,7 +8,7 @@ stages:
 
 
 build:k8s:
-  stage: deploy
+  stage: build
   # extends: .docker-utils-before-script
   image:
     name: lskjs/kubectl:1.27.2
