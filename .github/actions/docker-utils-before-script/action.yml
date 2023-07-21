@@ -34,6 +34,8 @@ runs:
         if [ -z "$prod_env_file" ]; then export prod_env_file="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/prod_env_file"; fi
       shell: bash
     - run: |
+        echo "GITHUB_REF = ${GITHUB_REF#refs/heads/}"
+        echo "GITHUB_SHA = ${GITHUB_SHA::7}"
         echo "CI_ENVIRONMENT_NAME = $CI_ENVIRONMENT_NAME"
         echo "CI_ENVIRONMENT_SLUG = $CI_ENVIRONMENT_SLUG"
         echo "CI_COMMIT_REF_NAME = $CI_COMMIT_REF_NAME"
