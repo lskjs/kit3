@@ -3,62 +3,63 @@ description: "Prepare docker utils before deploy"
 
 runs:
   using: "composite"
+  defaults:
+      run:
+        shell: bash
   steps:
+    - run: log() { echo "$*" ; "$@" ; }
+    - run: exists() { if [ -z "${!1}" ]; then echo "$1 is empty" && exit 1; fi }
+    - run: if [ -x "$(command -v pnpm)" ]; then pnpm config set store-dir .pnpm-store; fi
+    - run: if [ -z "$CI_COMMIT_REF_NAME" ]; then echo "CI_COMMIT_REF_NAME=${GITHUB_REF#refs/heads/}" >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$CI_COMMIT_SHORT_SHA" ]; then echo "CI_COMMIT_SHORT_SHA=${GITHUB_SHA::7}" >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$CI_COMMIT_SHORT_SHA" ]; then echo "CI_COMMIT_SHORT_SHA=${GITHUB_SHA::7}" >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$STAGE" ]; then echo 'STAGE="${{ env.CI_ENVIRONMENT_NAME }}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$VERSION" ]; then echo 'VERSION="${{ env. CI_COMMIT_SHORT_SHA }}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$PACKAGE_PATH" ]; then echo 'PACKAGE_PATH="."' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_REGISTRY_USER" ]; then echo 'DOCKER_REGISTRY_USER="${{ env.CI_REGISTRY_USER }}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_REGISTRY_PASS" ]; then echo 'DOCKER_REGISTRY_PASS="${{ env.CI_REGISTRY_PASSWORD }}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_REGISTRY" ]; then echo 'DOCKER_REGISTRY="${{ env.CI_REGISTRY }}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_REGISTRY_PATH" ]; then echo 'DOCKER_REGISTRY_PATH="${{ env.CI_PROJECT_PATH }}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_REGISTRY_URI" ]; then exists DOCKER_REGISTRY && echo 'DOCKER_REGISTRY_URI="${{ env.DOCKER_REGISTRY }}/${{ env. DOCKER_REGISTRY_PATH} }"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_IMAGE" ]; then echo 'DOCKER_IMAGE="${{ env.DOCKER_REGISTRY_URI }}:${{ env.CI_COMMIT_SHORT_SHA }}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_TAG" ]; then echo 'DOCKER_TAG=$(echo "${{ env.CI_COMMIT_REF_NAME }}" | rev | cut -d'/' -f 1 | rev)' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_IMAGE_VERSION" ]; then echo 'DOCKER_IMAGE_VERSION="${{ env.CI_COMMIT_SHORT_SHA }}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_IMAGE_TAG" ]; then echo 'DOCKER_IMAGE_TAG="${{ env.DOCKER_REGISTRY_URI }}:${{ env.DOCKER_TAG }}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_SERVICE" ]; then echo 'DOCKER_SERVICE="${{env.CI_PROJECT_PATH_SLUG}}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_FILE" ]; then exists PACKAGE_PATH && echo 'DOCKER_FILE="${{ env.PACKAGE_PATH }}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_STACK" ]; then echo 'DOCKER_STACK="docker-stack.yml"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$env_js" ]; then echo 'env_js="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/env_js"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$dev_env_js" ]; then echo 'dev_env_js="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/dev_env_js"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$prod_env_js" ]; then echo 'prod_env_js="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/prod_env_js"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$env_file" ]; then echo 'env_file="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/env_file"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$dev_env_file" ]; then echo 'dev_env_file="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/dev_env_file"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$prod_env_file" ]; then echo 'prod_env_file="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/prod_env_file"' >> "$GITHUB_ENV"; fi
     - run: |
-        log() { echo "$*" ; "$@" ; }
-        exists() { if [ -z "${!1}" ]; then echo "$1 is empty" && exit 1; fi }
-        if [ -x "$(command -v pnpm)" ]; then pnpm config set store-dir .pnpm-store; fi
-        if [ "$CWD" ]; then echo "Change directory: $CWD" && cd $CWD; fi
-        if [ -z "$CI_COMMIT_REF_NAME" ]; then echo "CI_COMMIT_REF_NAME=${GITHUB_REF#refs/heads/}" >> "$GITHUB_ENV"; fi
-        if [ -z "$CI_COMMIT_SHORT_SHA" ]; then echo "CI_COMMIT_SHORT_SHA=${GITHUB_SHA::7}" >> "$GITHUB_ENV"; fi
-        if [ -z "$STAGE" ]; then export STAGE="${CI_ENVIRONMENT_NAME}"; fi
-        if [ -z "$VERSION" ]; then export VERSION="${CI_COMMIT_SHORT_SHA}"; fi
-        if [ -z "$PACKAGE_PATH" ]; then export PACKAGE_PATH="."; fi
-        if [ -z "$DOCKER_REGISTRY_USER" ]; then export DOCKER_REGISTRY_USER="${CI_REGISTRY_USER}"; fi
-        if [ -z "$DOCKER_REGISTRY_PASS" ]; then export DOCKER_REGISTRY_PASS="${CI_REGISTRY_PASSWORD}"; fi
-        if [ -z "$DOCKER_REGISTRY" ]; then export DOCKER_REGISTRY="${CI_REGISTRY}"; fi
-        if [ -z "$DOCKER_REGISTRY_PATH" ]; then export DOCKER_REGISTRY_PATH="${CI_PROJECT_PATH}"; fi
-        if [ -z "$DOCKER_REGISTRY_URI" ]; then exists DOCKER_REGISTRY && export DOCKER_REGISTRY_URI="${DOCKER_REGISTRY}/${DOCKER_REGISTRY_PATH}"; fi
-        if [ -z "$DOCKER_IMAGE" ]; then export DOCKER_IMAGE="${DOCKER_REGISTRY_URI}:${CI_COMMIT_SHORT_SHA}"; fi
-        if [ -z "$DOCKER_TAG" ]; then echo 'DOCKER_TAG=$(echo "${{ env.CI_COMMIT_REF_NAME }}" | rev | cut -d'/' -f 1 | rev)' >> "$GITHUB_ENV"; fi
-        if [ -z "$DOCKER_IMAGE_VERSION" ]; then export DOCKER_IMAGE_VERSION="${CI_COMMIT_SHORT_SHA}"; fi
-        if [ -z "$DOCKER_IMAGE_TAG" ]; then export DOCKER_IMAGE_TAG="${DOCKER_REGISTRY_URI}:${DOCKER_TAG}"; fi
-        if [ -z "$DOCKER_SERVICE" ]; then export DOCKER_SERVICE="${CI_PROJECT_PATH_SLUG}"; fi
-        if [ -z "$DOCKER_FILE" ]; then exists PACKAGE_PATH && export DOCKER_FILE="${PACKAGE_PATH}"; fi
-        if [ -z "$DOCKER_STACK" ]; then export DOCKER_STACK="docker-stack.yml"; fi
-        if [ -z "$env_js" ]; then export env_js="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/env_js"; fi
-        if [ -z "$dev_env_js" ]; then export dev_env_js="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/dev_env_js"; fi
-        if [ -z "$prod_env_js" ]; then export prod_env_js="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/prod_env_js"; fi
-        if [ -z "$env_file" ]; then export env_file="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/env_file"; fi
-        if [ -z "$dev_env_file" ]; then export dev_env_file="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/dev_env_file"; fi
-        if [ -z "$prod_env_file" ]; then export prod_env_file="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/prod_env_file"; fi
-      shell: bash
-    - run: |
-        echo "CI_ENVIRONMENT_NAME = $CI_ENVIRONMENT_NAME"
-        echo "CI_ENVIRONMENT_SLUG = $CI_ENVIRONMENT_SLUG"
-        echo "CI_COMMIT_REF_NAME = ${{ env.CI_COMMIT_REF_NAME }}"
-        echo "STAGE = $STAGE"
-        echo "VERSION = $VERSION"
-        echo "PACKAGE_PATH = $PACKAGE_PATH"
-        echo "DOCKER_REGISTRY_USER = $DOCKER_REGISTRY_USER"
-        echo "DOCKER_REGISTRY_PASS = $DOCKER_REGISTRY_PASS"
-        echo "DOCKER_REGISTRY = $DOCKER_REGISTRY"
-        echo "DOCKER_REGISTRY_PATH = $DOCKER_REGISTRY_PATH"
-        echo "DOCKER_REGISTRY_URI = $DOCKER_REGISTRY_URI"
-        echo "DOCKER_IMAGE = $DOCKER_IMAGE"
-        echo "DOCKER_TAG = ${{ env.DOCKER_TAG }}"
-        echo "DOCKER_IMAGE_VERSION = $DOCKER_IMAGE_VERSION"
-        echo "DOCKER_IMAGE_TAG = $DOCKER_IMAGE_TAG"
-        echo "DOCKER_SERVICE = $DOCKER_SERVICE"
-        echo "DOCKER_FILE = $DOCKER_FILE"
-        echo "DOCKER_STACK = $DOCKER_STACK"
-        echo "DOCKER_IMAGE_CHECK = $DOCKER_IMAGE_CHECK"
-        echo "DOCKER_STACK_DEBUG = $DOCKER_STACK_DEBUG"
-        echo "env_js = $env_js"
-        echo "dev_env_js = $dev_env_js"
-        echo "prod_env_js = $prod_env_js"
-        echo "env_file = $env_file"
-        echo "dev_env_file = $dev_env_file"
-        echo "prod_env_file = $prod_env_file"
+        echo "CI_ENVIRONMENT_NAME = ${{ env.CI_ENVIRONMENT_NAME }}
+        echo "CI_ENVIRONMENT_SLUG = ${{ env.CI_ENVIRONMENT_SLUG }}
+        echo "CI_COMMIT_REF_NAME = ${{ env.CI_COMMIT_REF_NAME }}
+        echo "STAGE = ${{ env.STAGE }}
+        echo "VERSION = ${{ env.VERSION }}
+        echo "PACKAGE_PATH = ${{ env.PACKAGE_PATH }}
+        echo "DOCKER_REGISTRY_USER = ${{ env.DOCKER_REGISTRY_USER }}
+        echo "DOCKER_REGISTRY_PASS = ${{ env.DOCKER_REGISTRY_PASS }}
+        echo "DOCKER_REGISTRY = ${{ env.DOCKER_REGISTRY }}
+        echo "DOCKER_REGISTRY_PATH = ${{ env.DOCKER_REGISTRY_PATH }}
+        echo "DOCKER_REGISTRY_URI = ${{ env.DOCKER_REGISTRY_URI }}
+        echo "DOCKER_IMAGE = ${{ env.DOCKER_IMAGE }}
+        echo "DOCKER_TAG = ${{ env.DOCKER_TAG }}
+        echo "DOCKER_IMAGE_VERSION = ${{ env.DOCKER_IMAGE_VERSION }}
+        echo "DOCKER_IMAGE_TAG = ${{ env.DOCKER_IMAGE_TAG }}
+        echo "DOCKER_SERVICE = ${{ env.DOCKER_SERVICE }}
+        echo "DOCKER_FILE = ${{ env.DOCKER_FILE }}
+        echo "DOCKER_STACK = ${{ env.DOCKER_STACK }}
+        echo "DOCKER_IMAGE_CHECK = ${{ env.DOCKER_IMAGE_CHECK }}
+        echo "DOCKER_STACK_DEBUG = ${{ env.DOCKER_STACK_DEBUG }}
+        echo "env_js = ${{ env.env_js }}
+        echo "dev_env_js = ${{ env.dev_env_js }}
+        echo "prod_env_js = ${{ env.prod_env_js }}
+        echo "env_file = ${{ env.env_file }}
+        echo "dev_env_file = ${{ env.dev_env_file }}
+        echo "prod_env_file = ${{ env.prod_env_file }}
         echo ""
       shell: bash
