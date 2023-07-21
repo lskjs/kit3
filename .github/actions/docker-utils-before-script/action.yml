@@ -30,7 +30,7 @@ runs:
       shell: bash
     - run: if [ -z "$DOCKER_REGISTRY_PATH" ]; then echo 'DOCKER_REGISTRY_PATH="${{ env.CI_PROJECT_PATH }}"' >> "$GITHUB_ENV"; fi
       shell: bash
-    - run: if [ -z "$DOCKER_REGISTRY_URI" ]; then exists DOCKER_REGISTRY && echo 'DOCKER_REGISTRY_URI="${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_REGISTRY_PATH }}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_REGISTRY_URI" ]; then echo 'DOCKER_REGISTRY_URI="${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_REGISTRY_PATH }}"' >> "$GITHUB_ENV"; fi
       shell: bash
     - run: if [ -z "$DOCKER_IMAGE" ]; then echo 'DOCKER_IMAGE="${{ env.DOCKER_REGISTRY_URI }}:${{ env.CI_COMMIT_SHORT_SHA }}"' >> "$GITHUB_ENV"; fi
       shell: bash
@@ -40,9 +40,9 @@ runs:
       shell: bash
     - run: if [ -z "$DOCKER_IMAGE_TAG" ]; then echo 'DOCKER_IMAGE_TAG="${{ env.DOCKER_REGISTRY_URI }}:${{ env.DOCKER_TAG }}"' >> "$GITHUB_ENV"; fi
       shell: bash
-    - run: if [ -z "$DOCKER_SERVICE" ]; then echo 'DOCKER_SERVICE="${{env.CI_PROJECT_PATH_SLUG}}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_SERVICE" ]; then echo 'DOCKER_SERVICE="${{env.CI_PROJECT_PATH_SLUG }}"' >> "$GITHUB_ENV"; fi
       shell: bash
-    - run: if [ -z "$DOCKER_FILE" ]; then exists PACKAGE_PATH && echo 'DOCKER_FILE="${{ env.PACKAGE_PATH }}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_FILE" ]; then echo 'DOCKER_FILE="${{ env.PACKAGE_PATH }}"' >> "$GITHUB_ENV"; fi
       shell: bash
     - run: if [ -z "$DOCKER_STACK" ]; then echo 'DOCKER_STACK="docker-stack.yml"' >> "$GITHUB_ENV"; fi
       shell: bash
