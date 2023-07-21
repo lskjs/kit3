@@ -35,6 +35,7 @@ jobs:
             ./apps/api/lib
     
   docker_api:
+    needs: build_api
     defaults:
       run:
         shell: bash
