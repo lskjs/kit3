@@ -32,7 +32,7 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: api
-          path: release.zip
+          path: apps/api/release.zip
     
   docker_api:
     needs: build_api
