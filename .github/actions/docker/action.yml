@@ -1,13 +1,13 @@
 name: "Docker image build and upload"
 description: "Docker image build and upload"
+inputs:
+  working-directory:
+    description: 'Working directory'
+    required: false
+    default: ''
 
 runs:
   using: "composite"
-  inputs:
-    working-directory:
-      description: 'Working directory'
-      required: false
-      default: ''
   steps:
     - uses: ./.github/actions/docker-utils-before-script
     # - run: echo ${DOCKER_REGISTRY_PASS} | log docker login -u ${DOCKER_REGISTRY_USER} --password-stdin ${DOCKER_REGISTRY}
