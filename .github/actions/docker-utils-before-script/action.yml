@@ -9,8 +9,8 @@ runs:
         exists() { if [ -z "${!1}" ]; then echo "$1 is empty" && exit 1; fi }
         if [ -x "$(command -v pnpm)" ]; then pnpm config set store-dir .pnpm-store; fi
         if [ "$CWD" ]; then echo "Change directory: $CWD" && cd $CWD; fi
-        if [ -z "$CI_COMMIT_REF_NAME" ]; then export CI_COMMIT_REF_NAME="${GITHUB_REF#refs/heads/}"; fi
-        if [ -z "$CI_COMMIT_SHORT_SHA" ]; then export CI_COMMIT_SHORT_SHA="${GITHUB_SHA::7}"; fi
+        if [ -z "$CI_COMMIT_REF_NAME" ]; then echo "CI_COMMIT_REF_NAME=${GITHUB_REF#refs/heads/}" >> "$GITHUB_ENV"; fi
+        if [ -z "$CI_COMMIT_SHORT_SHA" ]; then echo "CI_COMMIT_SHORT_SHA="${GITHUB_SHA::7}" >> "$GITHUB_ENV"; fi
         if [ -z "$STAGE" ]; then export STAGE="${CI_ENVIRONMENT_NAME}"; fi
         if [ -z "$VERSION" ]; then export VERSION="${CI_COMMIT_SHORT_SHA}"; fi
         if [ -z "$PACKAGE_PATH" ]; then export PACKAGE_PATH="."; fi
@@ -20,7 +20,7 @@ runs:
         if [ -z "$DOCKER_REGISTRY_PATH" ]; then export DOCKER_REGISTRY_PATH="${CI_PROJECT_PATH}"; fi
         if [ -z "$DOCKER_REGISTRY_URI" ]; then exists DOCKER_REGISTRY && export DOCKER_REGISTRY_URI="${DOCKER_REGISTRY}/${DOCKER_REGISTRY_PATH}"; fi
         if [ -z "$DOCKER_IMAGE" ]; then export DOCKER_IMAGE="${DOCKER_REGISTRY_URI}:${CI_COMMIT_SHORT_SHA}"; fi
-        if [ -z "$DOCKER_TAG" ]; then export DOCKER_TAG=$(echo "${CI_COMMIT_REF_NAME}" | rev | cut -d'/' -f 1 | rev); fi
+        if [ -z "$DOCKER_TAG" ]; then echo 'DOCKER_TAG=$(echo "${{ env.CI_COMMIT_REF_NAME }}" | rev | cut -d'/' -f 1 | rev)' >> "$GITHUB_ENV"; fi
         if [ -z "$DOCKER_IMAGE_VERSION" ]; then export DOCKER_IMAGE_VERSION="${CI_COMMIT_SHORT_SHA}"; fi
         if [ -z "$DOCKER_IMAGE_TAG" ]; then export DOCKER_IMAGE_TAG="${DOCKER_REGISTRY_URI}:${DOCKER_TAG}"; fi
         if [ -z "$DOCKER_SERVICE" ]; then export DOCKER_SERVICE="${CI_PROJECT_PATH_SLUG}"; fi
@@ -34,11 +34,9 @@ runs:
         if [ -z "$prod_env_file" ]; then export prod_env_file="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/prod_env_file"; fi
       shell: bash
     - run: |
-        echo "GITHUB_REF = ${GITHUB_REF#refs/heads/}"
-        echo "GITHUB_SHA = ${GITHUB_SHA::7}"
         echo "CI_ENVIRONMENT_NAME = $CI_ENVIRONMENT_NAME"
         echo "CI_ENVIRONMENT_SLUG = $CI_ENVIRONMENT_SLUG"
-        echo "CI_COMMIT_REF_NAME = $CI_COMMIT_REF_NAME"
+        echo "CI_COMMIT_REF_NAME = ${{ env.CI_COMMIT_REF_NAME }}"
         echo "STAGE = $STAGE"
         echo "VERSION = $VERSION"
         echo "PACKAGE_PATH = $PACKAGE_PATH"
@@ -48,7 +46,7 @@ runs:
         echo "DOCKER_REGISTRY_PATH = $DOCKER_REGISTRY_PATH"
         echo "DOCKER_REGISTRY_URI = $DOCKER_REGISTRY_URI"
         echo "DOCKER_IMAGE = $DOCKER_IMAGE"
-        echo "DOCKER_TAG = $DOCKER_TAG"
+        echo "DOCKER_TAG = ${{ env.DOCKER_TAG }}"
         echo "DOCKER_IMAGE_VERSION = $DOCKER_IMAGE_VERSION"
         echo "DOCKER_IMAGE_TAG = $DOCKER_IMAGE_TAG"
         echo "DOCKER_SERVICE = $DOCKER_SERVICE"
