@@ -18,7 +18,7 @@ runs:
       shell: bash
     - run: if [ -z "$STAGE" ]; then echo 'STAGE="${{ env.CI_ENVIRONMENT_NAME }}"' >> "$GITHUB_ENV"; fi
       shell: bash
-    - run: if [ -z "$VERSION" ]; then echo 'VERSION="${{ env. CI_COMMIT_SHORT_SHA }}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$VERSION" ]; then echo 'VERSION="${{ env.CI_COMMIT_SHORT_SHA }}"' >> "$GITHUB_ENV"; fi
       shell: bash
     - run: if [ -z "$PACKAGE_PATH" ]; then echo 'PACKAGE_PATH="."' >> "$GITHUB_ENV"; fi
       shell: bash
@@ -30,7 +30,7 @@ runs:
       shell: bash
     - run: if [ -z "$DOCKER_REGISTRY_PATH" ]; then echo 'DOCKER_REGISTRY_PATH="${{ env.CI_PROJECT_PATH }}"' >> "$GITHUB_ENV"; fi
       shell: bash
-    - run: if [ -z "$DOCKER_REGISTRY_URI" ]; then exists DOCKER_REGISTRY && echo 'DOCKER_REGISTRY_URI="${{ env.DOCKER_REGISTRY }}/${{ env. DOCKER_REGISTRY_PATH} }"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_REGISTRY_URI" ]; then exists DOCKER_REGISTRY && echo 'DOCKER_REGISTRY_URI="${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_REGISTRY_PATH }}"' >> "$GITHUB_ENV"; fi
       shell: bash
     - run: if [ -z "$DOCKER_IMAGE" ]; then echo 'DOCKER_IMAGE="${{ env.DOCKER_REGISTRY_URI }}:${{ env.CI_COMMIT_SHORT_SHA }}"' >> "$GITHUB_ENV"; fi
       shell: bash
