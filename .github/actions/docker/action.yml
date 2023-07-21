@@ -3,10 +3,15 @@ description: "Docker image build and upload"
 
 runs:
   using: "composite"
+  inputs:
+    working-directory:
+      description: 'Working directory'
+      required: false
+      default: ''
   steps:
     - uses: ./.github/actions/docker-utils-before-script
     # - run: echo ${DOCKER_REGISTRY_PASS} | log docker login -u ${DOCKER_REGISTRY_USER} --password-stdin ${DOCKER_REGISTRY}
-    - run: docker build -t ${{ env.DOCKER_IMAGE }} ${{ env.DOCKER_FILE }}
+    - run: cd ${{ inputs.working-directory }} && docker build -t ${{ env.DOCKER_IMAGE }} ${{ env.DOCKER_FILE }}
       shell: bash
     - run: docker tag ${{ env.DOCKER_IMAGE }} ${{ env.DOCKER_IMAGE_TAG }}
       shell: bash

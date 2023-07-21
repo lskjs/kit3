@@ -51,6 +51,8 @@ jobs:
       - name: unzip artifact for deployment
         run: unzip -q release.zip && rm release.zip
       - uses: ./.github/actions/docker
+        with:
+          working-directory: apps/api
 
   # build_web:
   #   runs-on: ubuntu-22.04
