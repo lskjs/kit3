@@ -22,7 +22,7 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 8.1.0
-      - uses: ./.github/actions/utils-before
+      - run: pnpm config set store-dir .pnpm-store
       - run: pnpm install
       - run: pnpm build
       - run: pnpm -F "." deploy .release
@@ -47,7 +47,7 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 8.1.0
-      - uses: ./.github/actions/utils-before
+      - run: pnpm config set store-dir .pnpm-store
       - run: pnpm install
       - run: pnpm build
       - run: pnpm -F "." deploy .release
