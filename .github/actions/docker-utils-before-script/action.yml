@@ -32,6 +32,7 @@ runs:
         if [ -z "$env_file" ]; then export env_file="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/env_file"; fi
         if [ -z "$dev_env_file" ]; then export dev_env_file="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/dev_env_file"; fi
         if [ -z "$prod_env_file" ]; then export prod_env_file="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/prod_env_file"; fi
+      shell: bash
     - run: |
         echo "CI_ENVIRONMENT_NAME = $CI_ENVIRONMENT_NAME"
         echo "CI_ENVIRONMENT_SLUG = $CI_ENVIRONMENT_SLUG"
@@ -60,3 +61,4 @@ runs:
         echo "dev_env_file = $dev_env_file"
         echo "prod_env_file = $prod_env_file"
         echo ""
+      shell: bash
