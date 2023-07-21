@@ -28,12 +28,11 @@ jobs:
       - run: pnpm build
       - run: pnpm -F "." deploy .release
       - name: Zip artifact for deployment
-        run: zip release.zip ./.release ./lib -r
+        run: zip -q release.zip ./.release ./lib -r
       - uses: actions/upload-artifact@master
         with:
           name: api
-          path: |
-            ./release.zip
+          path: release.zip
     
   docker_api:
     needs: build_api
@@ -49,7 +48,7 @@ jobs:
         with:
           name: api
       - name: unzip artifact for deployment
-        run: unzip release.zip && rm release.zip
+        run: unzip -q release.zip && rm release.zip
       - uses: ./.github/actions/docker
 
   # build_web:
