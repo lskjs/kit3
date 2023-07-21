@@ -40,7 +40,7 @@ runs:
       shell: bash
     - run: if [ -z "$DOCKER_IMAGE_TAG" ]; then echo 'DOCKER_IMAGE_TAG="${{ env.DOCKER_REGISTRY_URI }}:${{ env.DOCKER_TAG }}"' >> "$GITHUB_ENV"; fi
       shell: bash
-    - run: if [ -z "$DOCKER_SERVICE" ]; then echo 'DOCKER_SERVICE="${{env.CI_PROJECT_PATH_SLUG }}"' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_SERVICE" ]; then echo 'DOCKER_SERVICE="${{ env.CI_PROJECT_PATH_SLUG }}"' >> "$GITHUB_ENV"; fi
       shell: bash
     - run: if [ -z "$DOCKER_FILE" ]; then echo 'DOCKER_FILE="${{ env.PACKAGE_PATH }}"' >> "$GITHUB_ENV"; fi
       shell: bash
