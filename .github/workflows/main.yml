@@ -6,6 +6,9 @@ on:
 
 jobs:
   build_api:
+    defaults:
+      run:
+        working-directory: apps/api
     runs-on: ubuntu-22.04
     env:
       CWD: apps/api
