@@ -47,6 +47,7 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: api
+          path: apps/api
       - name: unzip artifact for deployment
         run: unzip -q release.zip && rm release.zip
       - uses: ./.github/actions/docker
