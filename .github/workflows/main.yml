@@ -141,6 +141,21 @@ jobs:
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
+      - name: env file
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+          base64-encoded-secret: ${{ secrets.PROD_ENV_FILE }}
+          filename: "prod_env_file"
+          is-executable: false
+          working-directory: "./envs"
+      - name: env js
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+          base64-encoded-secret: ${{ secrets.PROD_ENV_JS }}
+          filename: "prod_env_js"
+          is-executable: false
+          working-directory: "./envs"
+      - run: kubectl create secret generic prod-kit --from-file=./envs/prod_env_file --from-file=./envs/prod_env_js --save-config --dry-run=client -o yaml | kubectl apply -f -
       - run: envsubst < deploy/k8s-deploy.yaml > deploy.yaml.${{ env.SHORT_SHA }}
         env: 
           APP_NAME: kit3
