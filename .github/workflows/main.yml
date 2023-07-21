@@ -1,5 +1,8 @@
 name: CI
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - "master"
 
 jobs:
   build_api:
