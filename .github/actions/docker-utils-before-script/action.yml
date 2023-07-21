@@ -10,7 +10,7 @@ runs:
         if [ -x "$(command -v pnpm)" ]; then pnpm config set store-dir .pnpm-store; fi
         if [ "$CWD" ]; then echo "Change directory: $CWD" && cd $CWD; fi
         if [ -z "$CI_COMMIT_REF_NAME" ]; then export CI_COMMIT_REF_NAME="${GITHUB_REF#refs/heads/}"; fi
-        if [ -z "$CI_COMMIT_SHORT_SHA" ]; then export CI_COMMIT_SHORT_SHA="$(git rev-parse --short "$GITHUB_SHA")"; fi
+        if [ -z "$CI_COMMIT_SHORT_SHA" ]; then export CI_COMMIT_SHORT_SHA="${GITHUB_SHA::7}"; fi
         if [ -z "$STAGE" ]; then export STAGE="${CI_ENVIRONMENT_NAME}"; fi
         if [ -z "$VERSION" ]; then export VERSION="${CI_COMMIT_SHORT_SHA}"; fi
         if [ -z "$PACKAGE_PATH" ]; then export PACKAGE_PATH="."; fi
