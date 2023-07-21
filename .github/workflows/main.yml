@@ -4,14 +4,17 @@ on:
     branches:
       - "master"
 
+env:
+  DOCKER_REGISTRY_PATH: kit
+  DOCKER_REGISTRY: registry.digitalocean.com
+
 jobs:
   build_api:
     defaults:
       run:
+        shell: bash
         working-directory: apps/api
     runs-on: ubuntu-22.04
-    env:
-      CWD: apps/api
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3
@@ -24,6 +27,26 @@ jobs:
       - run: pnpm install
       - run: pnpm build
       - run: pnpm -F "." deploy .release
+      - uses: actions/upload-artifact@master
+        with:
+          name: api
+          path: |
+            ./apps/api/.release
+            ./apps/api/lib
+    
+  docker_api:
+    defaults:
+      run:
+        shell: bash
+        working-directory: apps/api
+    runs-on: ubuntu-22.04
+    container: lskjs/dind
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@master
+        with:
+          name: api
+      - uses: ./.github/actions/docker
 
   # build_web:
   #   runs-on: ubuntu-22.04
