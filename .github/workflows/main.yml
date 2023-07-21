@@ -141,10 +141,10 @@ jobs:
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
-      - run: envsubst < deploy/k8s-deploy.yaml > deploy.yaml.${env.SHORT_SHA}
+      - run: envsubst < deploy/k8s-deploy.yaml > deploy.yaml.${{ env.SHORT_SHA }}
         env: 
           APP_NAME: kit3
           STAGE: prod
           DOCKER_IMAGE_API: "${{ vars.DOCKER_REGISTRY }}/${{ env.DOCKER_REGISTRY_PATH }}/api:${{ env.SHORT_SHA }}"
           DOCKER_IMAGE_WEB: "${{ vars.DOCKER_REGISTRY }}/${{ env.DOCKER_REGISTRY_PATH }}/web:${{ env.SHORT_SHA }}"
-      - run: kubectl apply -f ./deploy.yaml.${env.SHORT_SHA}
+      - run: kubectl apply -f ./deploy.yaml.${{ env.SHORT_SHA }}
