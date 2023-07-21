@@ -43,6 +43,8 @@ jobs:
     container: lskjs/dind
     steps:
       - uses: actions/checkout@v2
+      - name: Add SHORT_SHA env property with commit short sha
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
       - uses: actions/download-artifact@master
         with:
           name: api
@@ -65,7 +67,7 @@ jobs:
         with:
           context: apps/api
           push: true
-          tags: "${{ vars.DOCKER_REGISTRY }}/${DOCKER_REGISTRY_PATH}/api:${GITHUB_SHA::7}"
+          tags: "${{ vars.DOCKER_REGISTRY }}/${{ env.DOCKER_REGISTRY_PATH }}/api:${{ env.SHORT_SHA }}"
       # - uses: ./.github/actions/docker
       #   with:
       #     working-directory: apps/api
