@@ -1,0 +1,33 @@
+name: CI
+
+jobs:
+  build_api:
+    runs-on: ubuntu-22.04
+    env:
+      CWD: apps/api
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20.2.0'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.1.0
+      - uses: ./.github/actions/utils-before.yml
+      - run: pnpm install
+      - run: pnpm build
+      - run: pnpm -F "." deploy .release
+
+  # build_web:
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '20.2.0'
+  #     - uses: pnpm/action-setup@v2
+  #       with:
+  #         version: 8.1.0
+  #     - run: pnpm install
+  #     - run: pnpm build
+  #     - run: pnpm -F "." deploy .release

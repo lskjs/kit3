@@ -1,0 +1,11 @@
+name: "Prepare utils before build"
+description: "Prepare utils before build"
+
+runs:
+  using: "composite"
+  steps:
+      - run: |
+        log() { echo "$*" ; "$@" ; } &&
+        exists() { if [ -z "${!1}" ]; then echo "$1 is empty" && exit 1; fi } &&
+        if [ -x "$(command -v pnpm)" ]; then pnpm config set store-dir .pnpm-store; fi &&
+        if [ "$CWD" ]; then echo "Change directory: $CWD" && cd $CWD; fi
