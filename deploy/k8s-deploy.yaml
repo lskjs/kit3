@@ -21,7 +21,7 @@ spec:
           secret:
             secretName: prod-kit
       imagePullSecrets:
-          - name: canistra
+          - name: kit
       containers:
         - name: api
           image: ${DOCKER_IMAGE_API}

@@ -65,7 +65,6 @@ jobs:
         shell: bash
         working-directory: apps/api
     runs-on: ubuntu-22.04
-    container: lskjs/dind
     steps:
       - uses: actions/checkout@v2
       - name: Add SHORT_SHA env property with commit short sha
@@ -128,3 +127,24 @@ jobs:
           context: apps/web
           push: true
           tags: "${{ vars.DOCKER_REGISTRY }}/${{ env.DOCKER_REGISTRY_PATH }}/web:${{ env.SHORT_SHA }}"
+
+  deploy:
+    needs: [docker_api, docker_web]
+    runs-on: ubuntu-22.04
+    container: lskjs/kubectl
+    steps:
+      - uses: actions/checkout@v2
+      - name: Add SHORT_SHA env property with commit short sha
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+      - name: Set Kubernetes Context
+        uses: azure/k8s-set-context@v1
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+      - run: envsubst < deploy/k8s-deploy.yaml > deploy.yaml.${env.SHORT_SHA}
+        env: 
+          APP_NAME: kit3
+          STAGE: prod
+          DOCKER_IMAGE_API: "${{ vars.DOCKER_REGISTRY }}/${{ env.DOCKER_REGISTRY_PATH }}/api:${{ env.SHORT_SHA }}"
+          DOCKER_IMAGE_WEB: "${{ vars.DOCKER_REGISTRY }}/${{ env.DOCKER_REGISTRY_PATH }}/web:${{ env.SHORT_SHA }}"
+      - run: kubectl apply -f ./deploy.yaml.${env.SHORT_SHA}
