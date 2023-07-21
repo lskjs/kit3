@@ -5,12 +5,20 @@ inputs:
     description: 'Working directory'
     required: false
     default: ''
+  user:
+    description: 'Username'
+    required: true
+    default: ''
+  pass:
+    description: 'Password'
+    required: true
+    default: ''
 
 runs:
   using: "composite"
   steps:
     - uses: ./.github/actions/docker-utils-before-script
-    - run: echo ${{ secrets.DOCKER_REGISTRY_PASS }} | log docker login -u ${{ secrets.DOCKER_REGISTRY_USER }} --password-stdin ${{ vars.DOCKER_REGISTRY }}
+    - run: echo ${{ inputs.pass }} | log docker login -u ${{ inputs.user }} --password-stdin ${{ vars.DOCKER_REGISTRY }}
       shell: bash
     - run: cd ${{ inputs.working-directory }} && docker build -t ${{ env.DOCKER_IMAGE }} ${{ env.DOCKER_FILE }}
       shell: bash

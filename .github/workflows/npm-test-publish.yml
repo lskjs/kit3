@@ -1,10 +1,10 @@
 name: Test and publish
 
-on:
-  push:
-    branches: [ master, beta ]
-  release:
-    types: [ created ]
+# on:
+#   push:
+#     branches: [ master, beta ]
+#   release:
+#     types: [ created ]
 
 jobs:
   test:

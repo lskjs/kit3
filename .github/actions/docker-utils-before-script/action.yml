@@ -26,7 +26,7 @@ runs:
       shell: bash
     - run: if [ -z "$DOCKER_REGISTRY_PASS" ]; then echo 'DOCKER_REGISTRY_PASS=${{ env.CI_REGISTRY_PASSWORD }}' >> "$GITHUB_ENV"; fi
       shell: bash
-    - run: if [ -z "$DOCKER_REGISTRY" ]; then echo 'DOCKER_REGISTRY=${{ env.CI_REGISTRY }}' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_REGISTRY" ]; then echo 'DOCKER_REGISTRY=${{ vars.DOCKER_REGISTRY }}' >> "$GITHUB_ENV"; fi
       shell: bash
     - run: if [ -z "$DOCKER_REGISTRY_PATH" ]; then echo 'DOCKER_REGISTRY_PATH=${{ env.CI_PROJECT_PATH }}' >> "$GITHUB_ENV"; fi
       shell: bash
