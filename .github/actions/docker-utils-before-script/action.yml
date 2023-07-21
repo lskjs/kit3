@@ -34,7 +34,7 @@ runs:
       shell: bash
     - run: if [ -z "$DOCKER_IMAGE" ]; then echo 'DOCKER_IMAGE=${{ env.DOCKER_REGISTRY_URI }}:${{ env.CI_COMMIT_SHORT_SHA }}' >> "$GITHUB_ENV"; fi
       shell: bash
-    - run: if [ -z "$DOCKER_TAG" ]; then echo 'DOCKER_TAG=$(echo "${{ env.CI_COMMIT_REF_NAME }}" | rev | cut -d'/' -f 1 | rev)' >> "$GITHUB_ENV"; fi
+    - run: if [ -z "$DOCKER_TAG" ]; then echo 'DOCKER_TAG=${{ env.CI_COMMIT_REF_NAME }}' >> "$GITHUB_ENV"; fi
       shell: bash
     - run: if [ -z "$DOCKER_IMAGE_VERSION" ]; then echo 'DOCKER_IMAGE_VERSION=${{ env.CI_COMMIT_SHORT_SHA }}' >> "$GITHUB_ENV"; fi
       shell: bash
