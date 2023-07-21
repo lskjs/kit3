@@ -13,12 +13,18 @@ inputs:
     description: 'Password'
     required: true
     default: ''
+  registry:
+    description: 'Docker registry'
+    required: true
+    default: ''
 
 runs:
   using: "composite"
   steps:
     - uses: ./.github/actions/docker-utils-before-script
-    - run: echo ${{ inputs.pass }} | log docker login -u ${{ inputs.user }} --password-stdin ${{ vars.DOCKER_REGISTRY }}
+      with:
+        registry: ${{ inputs.registry }}
+    - run: echo ${{ inputs.pass }} | log docker login -u ${{ inputs.user }} --password-stdin ${{ env.DOCKER_REGISTRY }}
       shell: bash
     - run: cd ${{ inputs.working-directory }} && docker build -t ${{ env.DOCKER_IMAGE }} ${{ env.DOCKER_FILE }}
       shell: bash

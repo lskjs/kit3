@@ -54,6 +54,7 @@ jobs:
           working-directory: apps/api
           user: ${{ secrets.DOCKER_REGISTRY_USER }}
           pass: ${{ secrets.DOCKER_REGISTRY_PASS }}
+          registry: ${{ vars.DOCKER_REGISTRY }}
 
   # build_web:
   #   runs-on: ubuntu-22.04
