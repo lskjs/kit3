@@ -33,9 +33,9 @@ runs:
       shell: bash
     - run: if [ -z "$DOCKER_REGISTRY" ]; then echo 'DOCKER_REGISTRY=${{ inputs.registry }}' >> "$GITHUB_ENV"; fi
       shell: bash
-    - run: if [ -z "$DOCKER_REGISTRY_PATH" ]; then echo 'DOCKER_REGISTRY_PATH=${{ env.CI_PROJECT_PATH }}' >> "$GITHUB_ENV"; fi
-      shell: bash
-    - run: if [ -z "$DOCKER_REGISTRY_URI" ]; then echo 'DOCKER_REGISTRY_URI=${{ env.DOCKER_REGISTRY }}/${{ DOCKER_REGISTRY_PATH }}' >> "$GITHUB_ENV"; fi
+    # - run: if [ -z "$DOCKER_REGISTRY_PATH" ]; then echo 'DOCKER_REGISTRY_PATH=${{ env.CI_PROJECT_PATH }}' >> "$GITHUB_ENV"; fi
+    #   shell: bash
+    - run: if [ -z "$DOCKER_REGISTRY_URI" ]; then echo 'DOCKER_REGISTRY_URI=${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_REGISTRY_PATH }}' >> "$GITHUB_ENV"; fi
       shell: bash
     - run: if [ -z "$DOCKER_IMAGE" ]; then echo 'DOCKER_IMAGE=${{ env.DOCKER_REGISTRY_URI }}:${{ env.CI_COMMIT_SHORT_SHA }}' >> "$GITHUB_ENV"; fi
       shell: bash
