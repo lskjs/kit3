@@ -3,37 +3,61 @@ description: "Prepare docker utils before deploy"
 
 runs:
   using: "composite"
-  defaults:
-      run:
-        shell: bash
   steps:
     - run: log() { echo "$*" ; "$@" ; }
+      shell: bash
     - run: exists() { if [ -z "${!1}" ]; then echo "$1 is empty" && exit 1; fi }
+      shell: bash
     - run: if [ -x "$(command -v pnpm)" ]; then pnpm config set store-dir .pnpm-store; fi
+      shell: bash
     - run: if [ -z "$CI_COMMIT_REF_NAME" ]; then echo "CI_COMMIT_REF_NAME=${GITHUB_REF#refs/heads/}" >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$CI_COMMIT_SHORT_SHA" ]; then echo "CI_COMMIT_SHORT_SHA=${GITHUB_SHA::7}" >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$CI_COMMIT_SHORT_SHA" ]; then echo "CI_COMMIT_SHORT_SHA=${GITHUB_SHA::7}" >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$STAGE" ]; then echo 'STAGE="${{ env.CI_ENVIRONMENT_NAME }}"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$VERSION" ]; then echo 'VERSION="${{ env. CI_COMMIT_SHORT_SHA }}"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$PACKAGE_PATH" ]; then echo 'PACKAGE_PATH="."' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$DOCKER_REGISTRY_USER" ]; then echo 'DOCKER_REGISTRY_USER="${{ env.CI_REGISTRY_USER }}"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$DOCKER_REGISTRY_PASS" ]; then echo 'DOCKER_REGISTRY_PASS="${{ env.CI_REGISTRY_PASSWORD }}"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$DOCKER_REGISTRY" ]; then echo 'DOCKER_REGISTRY="${{ env.CI_REGISTRY }}"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$DOCKER_REGISTRY_PATH" ]; then echo 'DOCKER_REGISTRY_PATH="${{ env.CI_PROJECT_PATH }}"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$DOCKER_REGISTRY_URI" ]; then exists DOCKER_REGISTRY && echo 'DOCKER_REGISTRY_URI="${{ env.DOCKER_REGISTRY }}/${{ env. DOCKER_REGISTRY_PATH} }"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$DOCKER_IMAGE" ]; then echo 'DOCKER_IMAGE="${{ env.DOCKER_REGISTRY_URI }}:${{ env.CI_COMMIT_SHORT_SHA }}"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$DOCKER_TAG" ]; then echo 'DOCKER_TAG=$(echo "${{ env.CI_COMMIT_REF_NAME }}" | rev | cut -d'/' -f 1 | rev)' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$DOCKER_IMAGE_VERSION" ]; then echo 'DOCKER_IMAGE_VERSION="${{ env.CI_COMMIT_SHORT_SHA }}"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$DOCKER_IMAGE_TAG" ]; then echo 'DOCKER_IMAGE_TAG="${{ env.DOCKER_REGISTRY_URI }}:${{ env.DOCKER_TAG }}"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$DOCKER_SERVICE" ]; then echo 'DOCKER_SERVICE="${{env.CI_PROJECT_PATH_SLUG}}"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$DOCKER_FILE" ]; then exists PACKAGE_PATH && echo 'DOCKER_FILE="${{ env.PACKAGE_PATH }}"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$DOCKER_STACK" ]; then echo 'DOCKER_STACK="docker-stack.yml"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$env_js" ]; then echo 'env_js="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/env_js"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$dev_env_js" ]; then echo 'dev_env_js="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/dev_env_js"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$prod_env_js" ]; then echo 'prod_env_js="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/prod_env_js"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$env_file" ]; then echo 'env_file="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/env_file"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$dev_env_file" ]; then echo 'dev_env_file="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/dev_env_file"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: if [ -z "$prod_env_file" ]; then echo 'prod_env_file="/REPLACE_ME_PLEASE_OR_CHECK_PROTECTED_BRANCH_IN_CI/prod_env_file"' >> "$GITHUB_ENV"; fi
+      shell: bash
     - run: |
         echo "CI_ENVIRONMENT_NAME = ${{ env.CI_ENVIRONMENT_NAME }}"
         echo "CI_ENVIRONMENT_SLUG = ${{ env.CI_ENVIRONMENT_SLUG }}"
