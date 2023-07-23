@@ -27,7 +27,7 @@ jobs:
       - run: pnpm build
       - run: pnpm -F "." deploy .release
       - name: Zip artifact for deployment
-        run: zip -q release.zip ./.release ./lib -r
+        run: zip -q --symlinks release.zip ./.release ./lib -r
       - uses: actions/upload-artifact@master
         with:
           name: api
@@ -52,7 +52,7 @@ jobs:
       - run: pnpm build
       - run: pnpm -F "." deploy .release
       - name: Zip artifact for deployment
-        run: zip -q release.zip ./.release ./lib -r
+        run: zip -q --symlinks release.zip ./.release ./lib -r
       - uses: actions/upload-artifact@master
         with:
           name: web
