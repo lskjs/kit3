@@ -1,23 +1,22 @@
 {
-  "name": "kit3-web",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "start": "node lib --kit3/apps/web",
-    "build": "cp -R ./src ./lib && echo ok",
-    "test": "echo ok",
-    "dev": "nodemon src"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "eslint": "8.46.0",
+    "eslint-config-next": "13.4.12",
+    "next": "13.4.12",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
-  "files": [
-    "lib",
-    "Dockerfile",
-    "docker-stack.yml"
-  ]
+  "devDependencies": {
+    "@types/react": "18.2.18",
+    "typescript": "5.0"
+  }
 }
