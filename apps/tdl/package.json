@@ -1,26 +1,19 @@
 {
-  "name": "web",
-  "version": "0.1.0",
+  "name": "kit3-tdl",
+  "version": "1.0.0",
+  "description": "",
   "author": "Igor Suvorov <hi@isuvorov.com> (https://github.com/isuvorov)",
-  "private": true,
   "scripts": {
-    "start": "          next start",
-    "dev": "            next dev",
-    "build": "          next build && echo ok",
-    "test": "           next lint",
+    "start": "node lib --kit3/apps/tdl",
+    "dev": "  nodemon src",
+    "build": "cp -R ./src/ ./lib/ && echo ok",
+    "test": " echo ok",
     "prepack": "        lsk run prepack",
     "release": "        lsk run release"
   },
   "dependencies": {
-    "eslint": "8.46.0",
-    "eslint-config-next": "13.4.12",
-    "next": "13.4.12",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
-  },
-  "devDependencies": {
-    "@types/react": "18.2.18",
-    "typescript": "5.0"
+    "@lskjs/env": "^3.11.0",
+    "express": "^4.18.2"
   },
   "//": "///////////========================/////////========================/////////========================/////////",
   "prettier": "@lskjs/eslint-config/prettier",
@@ -30,7 +23,14 @@
   "jest": {
     "preset": "@lskjs/jest-config"
   },
+  "files": [
+    "lib",
+    "Dockerfile",
+    "docker-stack.yml"
+  ],
+  "main": "index.js",
   "///": "//////////========================/////////========================/////////========================/////////",
   "license": "ISC",
+  "keywords": [],
   "////": "/////////========================/////////========================/////////========================/////////"
 }
