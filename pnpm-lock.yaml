@@ -91,12 +91,6 @@ importers:
         specifier: ^6.3.3
         version: 6.3.3
 
-  apps/js:
-    dependencies:
-      express:
-        specifier: ^4.18.2
-        version: 4.18.2
-
   apps/tdl:
     dependencies:
       '@lskjs/env':

@@ -51,8 +51,8 @@ build_web:
     CWD: apps/web
   script:
     - pnpm install
-    - pnpm build
     - pnpm -F "." deploy .release
+    - cd .release && pnpm build
     
 docker_api:
   extends:
