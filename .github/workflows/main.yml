@@ -49,8 +49,8 @@ jobs:
           version: 8.1.0
       - uses: ./.github/actions/utils-before
       - run: pnpm install
-      - run: pnpm build
       - run: pnpm -F "." deploy .release
+      - run: cd .release && pnpm build
       - name: Zip artifact for deployment
         run: zip -q --symlinks release.zip ./.release ./lib -r
       - uses: actions/upload-artifact@master
