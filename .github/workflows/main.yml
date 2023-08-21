@@ -2,13 +2,11 @@ name: CI-action
 on:
   push:
     branches:
-      - "master"
-
+      - master
 env:
   ECS_TD: .github/workflows/td.json
   AWS_REGION: eu-west-1
   ECR_REPOSITORY: chatterfy
-
 
 jobs:
   build_api:
