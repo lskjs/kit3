@@ -2,7 +2,7 @@ name: CI-action
 on:
   push:
     branches:
-      - "action"
+      - "master"
 
 env:
   ECS_TD: .github/workflows/td.json
